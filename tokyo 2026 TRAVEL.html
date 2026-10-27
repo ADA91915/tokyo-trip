@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌸 東京與河口湖六日遊</title>
+<style>
+  :root {
+    --bg-color: #FFFCF6;
+    --border-color: #3E3A39;
+    --card-bg: #FFFFFF;
+    --coral: #F2A497;
+    --yellow: #F6D27A;
+    --blue: #A8D3E6;
+    --green: #B9DAA5;
+    --gray-bg: #F8F6F0;
+  }
+  
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--border-color);
+    margin: 0;
+    padding: 12px;
+    line-height: 1.6;
+    padding-bottom: 70px;
+  }
+  
+  /* 頂部 Header */
+  .header {
+    background-color: var(--yellow);
+    border: 3px solid var(--border-color);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 4px 4px 0px var(--border-color);
+    text-align: center;
+  }
+  .header h1 { margin: 0 0 6px 0; font-size: 1.3rem; }
+  .header p { margin: 0 0 10px 0; font-size: 0.85rem; color: #555; }
+  
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: bold;
+    margin: 2px;
+  }
+  .tag-coral { background-color: var(--coral); }
+  .tag-blue { background-color: var(--blue); }
+  .tag-green { background-color: var(--green); }
+  
+  /* 頁籤 Tab Nav */
+  .tab-nav {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 10px 0;
+    font-size: 0.88rem;
+    font-weight: bold;
+    border: 3px solid var(--border-color);
+    border-radius: 12px;
+    background-color: #FFFFFF;
+    color: var(--border-color);
+    box-shadow: 3px 3px 0px var(--border-color);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.1s ease;
+  }
+  .tab-btn.active {
+    background-color: var(--coral);
+    box-shadow: none;
+    transform: translate(3px, 3px);
+  }
+
+  /* 頁籤內容切換 */
+  .tab-content {
+    display: none;
+  }
+  .tab-content.active {
+    display: block;
+  }
+  
+  /* 卡片與內容樣式 */
+  .card {
+    background-color: var(--card-bg);
+    border: 3px solid var(--border-color);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 4px 4px 0px var(--border-color);
+  }
+  
+  .day-title {
+    font-size: 1.05rem;
+    font-weight: bold;
+    border-bottom: 2px dashed var(--border-color);
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .timeline-item {
+    margin-bottom: 10px;
+  }
+  .time {
+    font-weight: bold;
+    color: #D35400;
+    font-size: 0.88rem;
+  }
+  
+  .must-go {
+    background-color: var(--coral);
+    border: 1.5px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1px 6px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-left: 4px;
+  }
+  
+  .box-alert {
+    background-color: #FFF9E6;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-top: 6px;
+    font-size: 0.85rem;
+  }
+  
+  .spot-box {
+    background-color: var(--gray-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin-top: 6px;
+    font-size: 0.85rem;
+  }
+
+  /* Checklist 專用卡片與項目 */
+  .checklist-group-title {
+    font-size: 0.98rem;
+    font-weight: bold;
+    background-color: var(--blue);
+    border: 2px solid var(--border-color);
+    padding: 4px 10px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    display: inline-block;
+  }
+  .checklist-group-title.green { background-color: var(--green); }
+  .checklist-group-title.yellow { background-color: var(--yellow); }
+  .checklist-group-title.coral { background-color: var(--coral); }
+
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1.5px dashed #E0E0E0;
+    font-size: 0.9rem;
+  }
+  .checklist-item:last-child {
+    border-bottom: none;
+  }
+
+  .checklist-item input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.3);
+    accent-color: #D35400;
+    cursor: pointer;
+  }
+
+  .checklist-item.done span,
+  .checklist-item.done input[type="text"] {
+    text-decoration: line-through;
+    color: #888888;
+  }
+
+  /* 自訂編輯框樣式 */
+  .custom-input {
+    border: none;
+    border-bottom: 2px solid var(--border-color);
+    background: transparent;
+    font-size: 0.9rem;
+    font-family: inherit;
+    color: var(--border-color);
+    padding: 2px 4px;
+    width: 100%;
+    outline: none;
+  }
+  .custom-input:focus {
+    border-bottom-color: #D35400;
+    background-color: rgba(246, 210, 122, 0.2);
+  }
+
+  /* 新增按鈕樣式 */
+  .add-item-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 10px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    background-color: var(--yellow);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 2px 2px 0px var(--border-color);
+    transition: all 0.1s ease;
+  }
+  .add-item-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+  }
+
+  .badge-status {
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    margin-left: 6px;
+    display: inline-block;
+  }
+  .status-done { background-color: var(--green); }
+  .status-todo { background-color: var(--coral); }
+</style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <h1>🌸 東京與河口湖六日遊</h1>
+    <p>11/6~11/11</p>
+    <div>
+      <span class="tag tag-coral">📅 11/06 - 11/11</span>
+      <span class="tag tag-blue">👥 4人同行</span>
+      <span class="tag tag-green">🏨 錦糸町 + 河口湖溫泉</span>
+    </div>
+  </div>
+
+  <!-- 三分頁 Tab 按鈕 -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('itinerary')">🗓️ 每日行程</button>
+    <button class="tab-btn" onclick="switchTab('checklist')">📋 行前代辦</button>
+    <button class="tab-btn" onclick="switchTab('packing')">🧳 行李清單</button>
+  </div>
+
+  <!-- TAB 1: 每日行程 -->
+  <div id="tab-itinerary" class="tab-content active">
+    <!-- Day 1 -->
+    <div class="card">
+      <div class="day-title">
+        <span>Day 1 | 11/6（五）抵達東京與入住錦糸町</span>
+        <span class="tag tag-green">住錦糸町</span>
+      </div>
+      <div class="timeline-item">
+        <div class="time">17:30</div>
+        <div>抵達成田機場第 2 航廈。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">機場交通選擇</div>
+        <div>
+          • <strong>方案 A (京成本線特急)：</strong> 19:13 發車 – 20:25 抵達（約 ¥1,000/人，需轉乘半藏門線；抵達錦糸町建議走 5 號出口設有電梯）。<br>
+          • <strong>方案 B (JR 成田線/總武快速線)：</strong> 18:56 – 20:21 或 19:40 – 20:55（1號月台，約 ¥1,410/人，可直達）。
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">21:00</div>
+        <div>錦糸町飯店 Check-in。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">晚餐</div>
+        <div>周邊晚餐、超市採購補給（拉麵）。</div>
+      </div>
+      <div class="spot-box">
+        🏠 <strong>錦糸町住宿：</strong> 第 1~3 晚總計 ¥139,880。
+      </div>
+    </div>
+
+    <!-- Day 2 -->
+    <div class="card">
+      <div class="day-title">
+        <span>Day 2 | 11/7（六）淺草、秋葉原與澀谷景觀</span>
+        <span class="tag tag-green">住錦糸町</span>
+      </div>
+      <div class="timeline-item">
+        <div class="time">早餐</div>
+        <div>麥當勞</div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">10:00 – 12:30</div>
+        <div>御徒町 / 秋葉原逛街 <span class="must-go">必去</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">午餐</div>
+        <div>於 Yodobashi（友都八喜）用餐。
+          <div class="spot-box">
+            🍱 餐廳建議：とんかつ和幸 / インドカリーダイニング Cobara-Hetta
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">14:00</div>
+        <div>搭乘山手線前往澀谷</div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">15:00 – 17:00</div>
+        <div>SHIBUYA SKY 欣賞夕陽與夜景 <span class="must-go">必去</span>（後續可至新宿逛街）。
+          <div class="box-alert">
+            📌 <strong>門票狀態：</strong> 已購買成功（¥3,400/人）。
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">晚餐</div>
+        <div>豬排飯 / 鰻魚飯（建議：うなぎ吉川 渋谷店）</div>
+      </div>
+    </div>
+
+    <!-- Day 3 -->
+    <div class="card">
+      <div class="day-title">
+        <span>Day 3 | 11/8（日）日光一日遊</span>
+        <span class="tag tag-green">住錦糸町</span>
+      </div>
+      <div class="timeline-item">
+        <div class="time">05:30</div>
+        <div>起床、準備出門。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">06:00</div>
+        <div>早餐買超商。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">06:16 – 06:35</div>
+        <div>錦糸町出發搭乘 JR 總武線快速(久里濱) 06:23發車（3號月台，約 ¥200 /人）前往東京車站。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">08:00</div>
+        <div>東京車站集合，參加日光一日遊 <span class="must-go">必去</span></div>
+        <div class="box-alert">
+          📌 <strong>一日遊費用：</strong> 共 $6,787（約 $1,696/人）。
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">晚餐</div>
+        <div>東京車站享用晚餐。</div>
+      </div>
+    </div>
+
+    <!-- Day 4 -->
+    <div class="card">
+      <div class="day-title">
+        <span>Day 4 | 11/9（一）出發河口湖與溫泉住宿</span>
+        <span class="tag tag-blue">住河口湖</span>
+      </div>
+      <div class="timeline-item">
+        <div class="time">05:30</div>
+        <div>起床、退房並寄放行李，超商買早餐。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">07:07 – 09:28</div>
+        <div>錦糸町直發特急列車（富士回遊）至河口湖 <span class="must-go">必去</span>
+          <div class="box-alert">
+            📌 <strong>車票狀態：</strong> 已購買成功，四人共 ¥17,560（右側 AB 席可觀賞富士山）。
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">10:00</div>
+        <div>河口湖辦理租車取車。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">白天行程</div>
+        <div>御殿場 / 河口湖 OUTLET、Workman 採購、買蝦餅。</div>
+      </div>
+      <div class="spot-box">
+        ♨️ <strong>河口湖飯店預約（擇一）：</strong><br>
+        • 富士吟景：¥92,000（含早餐）<br>
+        • 新世紀：¥63,360（含早餐與晚餐）
+      </div>
+    </div>
+
+    <!-- Day 5 -->
+    <div class="card">
+      <div class="day-title">
+        <span>Day 5 | 11/10（二）富士五湖巡禮與返市區</span>
+        <span class="tag tag-green">住錦糸町</span>
+      </div>
+      <div class="timeline-item">
+        <div class="time">全天行程</div>
+        <div>
+          • 新倉山淺間神社 <span class="must-go">必去</span><br>
+          • 西湖 療癒之里根場<br>
+          • 大石公園<br>
+          • 河口湖全景纜車
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">16:00</div>
+        <div>河口湖辦理還車，2號月台16:30 搭乘高速巴士約18:35 抵達東京車站 。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">晚餐</div>
+        <div>返回錦糸町飯店入住並享用晚餐。</div>
+      </div>
+    </div>
+
+    <!-- Day 6 -->
+    <div class="card">
+      <div class="day-title">
+        <span>Day 6 | 11/11（三）市區採購與返台</span>
+        <span class="tag tag-coral">結束行程</span>
+      </div>
+      <div class="timeline-item">
+        <div class="time">上午</div>
+        <div>錦糸町市區採購與補貨。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">13:00 – 13:24</div>
+        <div>13:00 返回飯店拿行李，前往車站搭乘 13:24（每小時整點24分班次）JR總武線直達機場（約80分鐘）。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">18:25</div>
+        <div>成田機場搭乘班機起飛返台。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: 行前 CheckList 獨立分頁 -->
+  <div id="tab-checklist" class="tab-content">
+    <div class="card">
+      <div class="checklist-group-title">🎫 門票與交通預訂（已完成）</div>
+      
+      <div class="checklist-item done" onclick="toggleDone(this, event)">
+        <input type="checkbox" checked>
+        <div>
+          <span><strong>SHIBUYA SKY 展望台門票</strong>（11/7 16:00 入場）</span>
+          <span class="badge-status status-done">已購買</span>
+          <div style="font-size: 0.8rem; color: #666;">費用：¥3,400 / 人</div>
+        </div>
+      </div>
+
+      <div class="checklist-item done" onclick="toggleDone(this, event)">
+        <input type="checkbox" checked>
+        <div>
+          <span><strong>JR 富士回遊特急車票</strong>（11/9 07:07 錦糸町 ➔ 河口湖）</span>
+          <span class="badge-status status-done">已搶購</span>
+          <div style="font-size: 0.8rem; color: #666;">四人費用：¥17,560（右側 AB 席，觀賞富士山視角）</div>
+        </div>
+      </div>
+
+      <div class="checklist-item done" onclick="toggleDone(this, event)">
+        <input type="checkbox" checked>
+        <div>
+          <span><strong>日光一日遊行程預訂</strong>（11/8 08:00 東京車站集合）</span>
+          <span class="badge-status status-done">已預訂</span>
+          <div style="font-size: 0.8rem; color: #666;">四人總費用：$6,787（約 $1,696 / 人）</div>
+        </div>
+      </div>
+
+      <div class="checklist-item done" onclick="toggleDone(this, event)">
+        <input type="checkbox" checked>
+        <div>
+          <span><strong>四人來回機票預訂</strong>（11/6 出發 - 11/11 返台）</span>
+          <span class="badge-status status-done">已完成</span>
+          <div style="font-size: 0.8rem; color: #666;">總費用：$42,252</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="checklist-group-title">🚗 住宿與自駕租車準備</div>
+      
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div>
+          <span><strong>河口湖住宿飯店最終二選一確認</strong></span>
+          <span class="badge-status status-todo">待確認</span>
+          <div style="font-size: 0.8rem; color: #666;">• 富士吟景：¥92,000（含早餐）<br>• 新世紀：¥63,360（含早晚餐）</div>
+        </div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div>
+          <span><strong>河口湖租車駕照文件準備</strong></span>
+          <span class="badge-status status-todo">需帶齊</span>
+          <div style="font-size: 0.8rem; color: #666;">駕駛人需攜帶「台灣駕照正本」+「日文譯本正本」+「護照」</div>
+        </div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div>
+          <span><strong>11/9 錦糸町飯店寄放行李手續確認</strong></span>
+          <span class="badge-status status-todo">需辦理</span>
+          <div style="font-size: 0.8rem; color: #666;">前往河口湖兩天一夜，大件行李寄放飯店，攜帶輕便過夜包</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="checklist-group-title">🧳 隨身證件與行前準備</div>
+      
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div><span>護照正本（檢查有效期限 6 個月以上）</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div><span>填寫 Visit Japan Web（入境與海關申報 QR Code）</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div><span>開通日本網卡 / eSIM 或 Roaming 漫遊服務</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div><span>日圓現金準備 & 綁定 Suica / Pasmo 電子票卡</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: 行李準備清單 獨立分頁 -->
+  <div id="tab-packing" class="tab-content">
+    <div class="card">
+      <div class="checklist-group-title coral">📄 隨身證件與重要財物</div>
+      
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>護照正本（影本可備份於手機）</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>台灣駕照正本 + 日文譯本（河口湖自駕必備）</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>日圓現金、信用卡（海外回饋高者佳）</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>IC卡（物理 Suica / PASMO 或手機 Apple Wallet 綁定）</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>行程表與飯店/租車預約單（電子檔或紙本）</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="checklist-group-title yellow">🔌 3C 數位配件</div>
+      
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>手機 & 充電線</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>行動電源（⚠️ 請務必隨身攜帶，不可托運）</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>多孔 USB/Type-C 充電頭</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>日本網卡 / eSIM / 漫遊（出發前確認已開通）</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>耳機、相機及相關線材</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="checklist-group-title green">🧥 衣物穿搭（11月保暖穿著）</div>
+      
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>保暖外衣 / 羽絨外套（河口湖與日光早晚溫差大）</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>長袖上衣、長褲（建議洋蔥式穿法，室內有暖氣）</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>發熱衣 / 保暖內衣</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>好穿走的運動鞋/休閒鞋（每天日行萬步）</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>襪子、內衣褲（適量替換）</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>圍巾、毛帽或手套（河口湖五湖地區清晨較冷）</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>兩天一夜過夜小包（11/9 錦糸町寄放行李時使用）</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="checklist-group-title blue">💊 個人藥品與盥洗用品</div>
+      
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>常備個人藥物（感冒藥、腸胃藥、止痛藥、暈車藥）</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>個人保養品、護唇膏、護手霜（日本11月乾燥）</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>個人盥洗牙刷/牙膏組（響應環保自備佳）</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>摺疊傘 / 輕便雨具</span></div>
+      </div>
+
+      <div class="checklist-item" onclick="toggleDone(this, event)">
+        <input type="checkbox">
+        <div style="flex:1;"><span>購物袋 / 摺疊大背包（血拼備用）</span></div>
+      </div>
+    </div>
+
+    <!-- 自訂補充清單（空白可編輯）卡片 -->
+    <div class="card" id="custom-packing-card">
+      <div class="checklist-group-title yellow">✏️ 自訂個人補充清單（可隨時編輯）</div>
+      
+      <div id="custom-packing-container">
+        <div class="checklist-item" onclick="toggleDone(this, event)">
+          <input type="checkbox">
+          <div style="flex:1;"><input type="text" class="custom-input" placeholder="點擊填寫新增物品（如：隱形眼鏡、保養品試用包...）" onclick="event.stopPropagation()"></div>
+        </div>
+        <div class="checklist-item" onclick="toggleDone(this, event)">
+          <input type="checkbox">
+          <div style="flex:1;"><input type="text" class="custom-input" placeholder="點擊填寫新增物品..." onclick="event.stopPropagation()"></div>
+        </div>
+        <div class="checklist-item" onclick="toggleDone(this, event)">
+          <input type="checkbox">
+          <div style="flex:1;"><input type="text" class="custom-input" placeholder="點擊填寫新增物品..." onclick="event.stopPropagation()"></div>
+        </div>
+      </div>
+
+      <button class="add-item-btn" onclick="addCustomItem()">➕ 新增空白項目</button>
+    </div>
+
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      
+      const contents = document.querySelectorAll('.tab-content');
+      contents.forEach(content => content.classList.remove('active'));
+      
+      if (tabName === 'itinerary') {
+        buttons[0].classList.add('active');
+        document.getElementById('tab-itinerary').classList.add('active');
+      } else if (tabName === 'checklist') {
+        buttons[1].classList.add('active');
+        document.getElementById('tab-checklist').classList.add('active');
+      } else if (tabName === 'packing') {
+        buttons[2].classList.add('active');
+        document.getElementById('tab-packing').classList.add('active');
+      }
+    }
+
+    function toggleDone(element, event) {
+      if (event && event.target.tagName.toLowerCase() === 'input' && event.target.type === 'text') {
+        return;
+      }
+      
+      const checkbox = element.querySelector('input[type="checkbox"]');
+      if (event && event.target !== checkbox) {
+        checkbox.checked = !checkbox.checked;
+      }
+      
+      if (checkbox.checked) {
+        element.classList.add('done');
+      } else {
+        element.classList.remove('done');
+      }
+    }
+
+    function addCustomItem() {
+      const container = document.getElementById('custom-packing-container');
+      const newItem = document.createElement('div');
+      newItem.className = 'checklist-item';
+      newItem.setAttribute('onclick', 'toggleDone(this, event)');
+      newItem.innerHTML = `
+        <input type="checkbox">
+        <div style="flex:1;"><input type="text" class="custom-input" placeholder="點擊填寫新增物品..." onclick="event.stopPropagation()"></div>
+      `;
+      container.appendChild(newItem);
+    }
+  </script>
+
+</body>
+</html>
